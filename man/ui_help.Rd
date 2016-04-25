@@ -4,7 +4,7 @@
 \alias{ui_help}
 \title{ui_help}
 \usage{
-ui_help(id)
+ui_help(idHlp, pkg)
 }
 \arguments{
 \item{id}{shiny id}

@@ -16,9 +16,7 @@ met_selected <- function(input, output, session, model, ndat){
   mm = round(model$biplot[, c(2:ncol(model$biplot))], 5)
   model$biplot[, c(2:ncol(model$biplot)) ] = mm
 
-
   ranges <- reactiveValues(x = NULL, y = NULL)
-
 
   dat = model
 
@@ -26,11 +24,9 @@ met_selected <- function(input, output, session, model, ndat){
     model
   })
 
-
   vals <- reactiveValues(
     keeprows = rep(TRUE, nrow(dat$biplot))
   )
-
 
   brush <- reactive({
     brushedPoints(data()$biplot, input$plot_brush, "PC1", "PC2")
@@ -63,14 +59,9 @@ met_selected <- function(input, output, session, model, ndat){
     gg_biplot(model, ranges = ranges)
   })
 
-  output$plotTitle <- renderUI(HTML("<center><h4>Biplot explorer</h4></center>"))
-
-  # shinyBS::addPopover(session, "plotTitle", "Biplot", content = paste0(
-  #   "<p>This biplot has dots sized by Yield and colored by type -
-  #   either 'genotype' or 'environment'", placement = "bottom"
-  # ) )
-
-  output$lineTitle <- renderUI(HTML("<center><h4>Genotypes in environments</h4></center>"))
+  # output$plotTitle <- renderUI(HTML("<center><h4>Biplot explorer</h4></center>"))
+  #
+  # output$lineTitle <- renderUI(HTML("<center><h4>Genotypes in environments</h4></center>"))
 
   flt <- reactive({
     res <- brush()
@@ -98,11 +89,6 @@ met_selected <- function(input, output, session, model, ndat){
   })
 
   output$hist <- renderPlot({
-    # res <- brush()
-    # if(nrow(res) == 0){
-    #   res <- model$biplot[!vals$keeprows, , drop = FALSE]
-    # }
-    # print(res)
     gg_hist(model, flt())
   })
 
@@ -111,21 +97,17 @@ met_selected <- function(input, output, session, model, ndat){
     if(nrow(res)==0){
       res <- data()$biplot[!vals$keeprows, , drop = FALSE]
     }
-
-    # res <- mdata()
-    # res <- res[res$type == "GENSEL", ]
-    #print(res)
     if (nrow(res) == 0 )
-      #return()
       return(data()$biplot[, c(2:5)])
-
-    #if(nrow(res) == 0) res = resb
     res[, c(2:5)]
   })
 
   output$plot_brushedpoints <- renderDataTable({
     fltDat()
-  }, options = list(filter = "top"))
+  }, options = list(searching = FALSE,
+    lengthMenu = list(c(5, 10, 15, -1), c('5', '10','15', 'All')),
+    pageLength = 5)
+  )
 
 
   observeEvent(input$plot_dblclick, {
@@ -140,44 +122,17 @@ met_selected <- function(input, output, session, model, ndat){
     }
   })
 
-
-
   observeEvent(input$plot_click, {
-    #print(input$plot_click)
     res <- shiny::nearPoints(data()$biplot, input$plot_click,
                              "PC1", "PC2", allRows = TRUE)
-    #print(res)
     vals$keeprows <- xor(vals$keeprows, res$selected_)
-    #print(vals$keeprows)
   })
-
-  # Toggle points that are brushed, when button is clicked
-  # observeEvent(input$exclude_toggle, {
-  #   res <- brushedPoints(dat$biplot, input$plot_brush, allRows = TRUE)
-  #
-  #   vals$keeprows <- xor(vals$keeprows, res$selected_)
-  # })
 
   # Reset all points
   observeEvent(input$exclude_reset, {
     vals$keeprows <- rep(TRUE, nrow(dat$biplot))
   })
 
-
-  # metsel = shiny::reactive({
-  #   res <- brush()
-  #   if(nrow(res)==0){
-  #     res <- dat$biplot[!vals$keeprows, , drop = FALSE]
-  #   }
-  #
-  #   if (nrow(res) == 0 )
-  #     #return()
-  #     return(data()$biplot[, c(2:5)])
-  #
-  #   res[, c(2:5)]
-  #
-  # })
-  #
   return(fltDat)
 
 }

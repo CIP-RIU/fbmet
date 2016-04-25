@@ -20,7 +20,8 @@ Imports:
     magrittr,
     DT,
     stringr,
-    shinyBS
+    shinyBS,
+    yaml
 Suggests:
     knitr,
     rmarkdown,
