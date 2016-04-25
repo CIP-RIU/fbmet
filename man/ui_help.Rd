@@ -2,17 +2,19 @@
 % Please edit documentation in R/ui_help.R
 \name{ui_help}
 \alias{ui_help}
-\title{ui_help}
+\title{ui_tips}
 \usage{
-ui_help(id)
+ui_help(idHlp, pkg)
 }
 \arguments{
-\item{id}{shiny id}
+\item{idHlp}{a tag id}
+
+\item{pkg}{the package where the tips are}
 }
 \value{
 tagList
 }
 \description{
-ui_help
+ui_tips
 }
 

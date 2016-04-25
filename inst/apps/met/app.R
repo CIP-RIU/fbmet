@@ -24,13 +24,13 @@ shinyApp(
   server = function(input, output, session) {
     metsel = callModule(met_selected, "met", model, ndat)
 
-    output$plot_brushedpoints <- DT::renderDataTable({
-      res = NULL
-      if(is.data.frame( metsel)){
-        res = metsel
-      }
-      res
-    })
+    # output$plot_brushedpoints <- DT::renderDataTable({
+    #   res = NULL
+    #   if(is.data.frame( metsel)){
+    #     res = metsel
+    #   }
+    #   res
+    # })
 
   }
 )
