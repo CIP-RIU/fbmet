@@ -1,0 +1,4 @@
+Name: HIDAP MET assist
+Description: Assists breeder in selection of genotypes
+Binding: metAddin
+Interactive: true
