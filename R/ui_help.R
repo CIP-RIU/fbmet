@@ -1,4 +1,4 @@
-#' ui_tips
+#' ui_help
 #'
 #' @param idHlp a tag id
 #' @param pkg the package where the tips are
@@ -6,7 +6,6 @@
 #' @import shiny
 #' @import shinyBS
 #' @import yaml
-#' @aliases ui_help
 #' @return tagList
 #' @export
 ui_help <- function(idHlp, pkg){
