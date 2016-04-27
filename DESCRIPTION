@@ -24,6 +24,7 @@ Suggests:
     rmarkdown,
     testthat,
     DT,
-    shinydashboard
+    shinydashboard,
+    shinyBS
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

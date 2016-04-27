@@ -1,8 +1,12 @@
 library(shiny)
 library(shinydashboard)
+library(shinyBS)
 library(agricolae)
 library(dplyr)
 library(fbmet)
+library(fbhelp)
+
+
 
 shinyApp(
   ui = dashboardPage( skin = "yellow",
@@ -16,10 +20,12 @@ shinyApp(
                 ),
         tabPanel("Report"),
         tabPanel("Help",
-                 includeHTML(
-                  fbhelp::list_tutorials("fbmet")[[1]]
-                 )
-                )
+                 helpPanel(fbhelp::list_tutorials("fbmet")[[1]])
+                ),
+        tabPanel("About",
+                 helpPanel(fbhelp::list_tutorials("fbmet", name = "about")[[1]],
+                           center = TRUE)
+        )
       )
     )
   ),
@@ -27,9 +33,12 @@ shinyApp(
   server = function(input, output, session) {
     plrv =  loadRData((system.file("data/plrv.rda", package="agricolae")))
     model<- with(plrv, AMMI(Locality, Genotype, Rep, Yield, console=FALSE))
-    ndat <- plrv %>% group_by(Genotype, Locality) %>% summarise(Yield = mean(Yield))
+    ndat <- dplyr::summarise(group_by(plrv, Genotype, Locality), Yield = mean(Yield))
+    withProgress(message = "Generating plots", {
+      metsel = callModule(met_selected, "met", model, ndat)
+    }
+    )
 
-    metsel = callModule(met_selected, "met", model, ndat)
   }
 
 )

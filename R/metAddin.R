@@ -11,7 +11,7 @@
 metAddin <- function(){
 
   ui <- miniUI::miniPage(
-    miniUI::gadgetTitleBar("MET assist"),
+    miniUI::gadgetTitleBar("MET explorer"),
     miniUI::miniContentPanel(
       linkedBiplotUI("met")
     )
@@ -22,11 +22,12 @@ metAddin <- function(){
 
     model<- with(plrv, AMMI(Locality, Genotype, Rep, Yield,
                  console=FALSE))
-    ndat <- plrv %>% dplyr::group_by(Genotype, Locality) %>%
-      summarise(Yield = mean(Yield))
+    ##ndat <- dplyr::group_by(plrv, "Genotype", "Locality")
+    ndat <- with(plrv, dplyr::summarise(group_by(plrv, Genotype, Locality),
+                             Yield = mean(Yield))
+    )
 
     metsel = callModule(met_selected, "met", model, ndat)
-
 
     observeEvent(input$done, {
       stopApp()

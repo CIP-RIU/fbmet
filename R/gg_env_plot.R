@@ -42,11 +42,12 @@ gg_env_plot <- function(atable,
     geom_violin() +
   #gg = gg + with(dat, {
     geom_line(data = dat, aes(factor(dat$Locality), dat[, trait],
-                              group = Genotype,
-                              color = Genotype
+                              group = dat$Genotype,
+                              color = dat$Genotype
 
     )) +
-      geom_point(size=1.2, fill="white")
+    guides(fill=guide_legend(title=NULL)) +
+      geom_point(size = 1.2, fill = "white")
   #})
   gg
 }
