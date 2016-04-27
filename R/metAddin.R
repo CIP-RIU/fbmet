@@ -2,6 +2,9 @@
 #'
 #' Creates an Rstudio Addin.
 #' @import dplyr
+#' @import agricolae
+#' @import shiny
+#' @import miniUI
 #' @return exit status
 #'
 #' @export
@@ -17,10 +20,10 @@ metAddin <- function(){
   server <- function(input, output, session) {
     plrv =  loadRData((system.file("data/plrv.rda", package="agricolae")))
 
-    model<- AMMI(plrv$Locality, plrv$Genotype, plrv$Rep, plrv$Yield,
-                 console=FALSE)
-    ndat <- plrv %>% dplyr::group_by(plrv$Genotype, plrv$Locality) %>%
-      dplyr::summarise(Yield = mean(plrv$Yield))
+    model<- with(plrv, AMMI(Locality, Genotype, Rep, Yield,
+                 console=FALSE))
+    ndat <- plrv %>% dplyr::group_by(Genotype, Locality) %>%
+      summarise(Yield = mean(Yield))
 
     metsel = callModule(met_selected, "met", model, ndat)
 
