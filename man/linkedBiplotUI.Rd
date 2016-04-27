@@ -9,7 +9,13 @@ linkedBiplotUI(id)
 \arguments{
 \item{id}{shiny}
 }
+\value{
+fluidRow (shiny fragment)
+}
 \description{
 linkedBiplotUI
+}
+\author{
+Reinhard Simon
 }
 

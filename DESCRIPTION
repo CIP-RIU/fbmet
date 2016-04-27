@@ -11,20 +11,18 @@ License: GPL-2
 LazyData: true
 Imports:
     shiny,
-    shinydashboard,
     miniUI,
     ggplot2,
     ggrepel,
     agricolae,
     dplyr,
-    magrittr,
-    DT,
     stringr,
-    shinyBS,
-    yaml
+    fbhelp
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    DT,
+    shinydashboard
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

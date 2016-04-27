@@ -17,28 +17,14 @@ shinyApp(
         tabPanel("Report"),
         tabPanel("Help")
       )
-
     )
-
   ),
 
   server = function(input, output, session) {
-
-    data(plrv)
-
+    plrv =  loadRData((system.file("data/plrv.rda", package="agricolae")))
     model<- with(plrv, AMMI(Locality, Genotype, Rep, Yield, console=FALSE))
     ndat <- plrv %>% group_by(Genotype, Locality) %>% summarise(Yield = mean(Yield))
 
-
     metsel = callModule(met_selected, "met", model, ndat)
-
-    # output$plot_brushedpoints <- DT::renderDataTable({
-    #   res = NULL
-    #   if(is.data.frame( metsel)){
-    #     res = metsel
-    #   }
-    #   res
-    # })
-
   }
 )

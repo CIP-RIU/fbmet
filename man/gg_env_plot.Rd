@@ -32,7 +32,7 @@ data(plrv)
 library(fbmet)
 
 # enable easy summaries
-library(magrittr)
+#library(magrittr)
 library(dplyr)
 
 atable <- plrv \%>\% group_by(Genotype, Locality) \%>\% summarise(Yield = mean(Yield))

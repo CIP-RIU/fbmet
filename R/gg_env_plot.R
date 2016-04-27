@@ -12,7 +12,7 @@
 #' @param trait the trait (or index) to be shown
 #' @param genotypes a subset of up to 10 genotypes that will be highlighted through lines.
 #' @import ggplot2
-#' @import magrittr
+##@import magrittr
 #'
 #' @export
 #'
@@ -35,18 +35,18 @@ gg_env_plot <- function(atable,
   if (nrow(dat) == 0)
     return()
 
-  ggplot(data = atable, aes(factor(atable$Locality), atable[, trait])) +
+  gg = ggplot(data = atable, aes(factor(atable$Locality), atable[, trait])) +
     ggtitle(paste0("Performance over environments for trait: ", names(atable)[3])) +
     xlab("Locality") +
     ylab(trait) +
     geom_violin() +
+  #gg = gg + with(dat, {
     geom_line(data = dat, aes(factor(dat$Locality), dat[, trait],
                               group = Genotype,
                               color = Genotype
 
-                              )) +
-    #guides(fill=guide_legend(title="Genotypes")) +
-    #scale_color_manual("Genotype") +
-    geom_point(size=1.2, fill="white") #+
-    #theme(legend.position="right")
+    )) +
+      geom_point(size=1.2, fill="white")
+  #})
+  gg
 }

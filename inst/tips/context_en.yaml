@@ -6,7 +6,7 @@ plotTitle_hover: This biplot has dots sized by Yield and colored by type -
 tableTitle_label: Table MET
 tableTitle_hover: This table contains the genotypes selected from brushing
               or clicking on the linked biplot.
-lineTitle_label: Environmet explorer
+lineTitle_label: EnvironmeNt explorer
 lineTitle_hover: This plot has the mean trait values of all genotypes in separate
               violin plots. The violin plot shows the density distribution of values
               and is a bit more informative than a box-plot. By default, when nothing
