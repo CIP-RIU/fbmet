@@ -15,7 +15,11 @@ shinyApp(
                 linkedBiplotUI("met")
                 ),
         tabPanel("Report"),
-        tabPanel("Help")
+        tabPanel("Help",
+                 includeHTML(
+                  fbhelp::list_tutorials("fbmet")[[1]]
+                 )
+                )
       )
     )
   ),
@@ -27,4 +31,5 @@ shinyApp(
 
     metsel = callModule(met_selected, "met", model, ndat)
   }
+
 )

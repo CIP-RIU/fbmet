@@ -19,6 +19,7 @@ Imports:
     stringr,
     fbhelp
 Suggests:
+    BiocStyle,
     knitr,
     rmarkdown,
     testthat,
