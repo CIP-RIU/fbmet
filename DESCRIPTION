@@ -17,7 +17,8 @@ Imports:
     agricolae,
     dplyr,
     stringr,
-    fbhelp
+    fbhelp,
+    st4gi
 Suggests:
     BiocStyle,
     knitr,

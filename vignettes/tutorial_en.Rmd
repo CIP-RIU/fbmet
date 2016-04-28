@@ -1,6 +1,6 @@
 ---
 title: "Tutorial"
-author: "Reinhard Simon, Raul Eyzaguirre"
+author: "Reinhard Simon"
 date: "`r Sys.Date()`"
 output: 
   BiocStyle::html_document:
