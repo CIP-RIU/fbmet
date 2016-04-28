@@ -26,6 +26,7 @@ Suggests:
     testthat,
     DT,
     shinydashboard,
-    shinyBS
+    shinyBS,
+    shinyFiles
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

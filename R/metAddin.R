@@ -5,6 +5,7 @@
 #' @import agricolae
 #' @import shiny
 #' @import miniUI
+# @import shinyBS
 #' @return exit status
 #'
 #' @export
@@ -12,8 +13,30 @@ metAddin <- function(){
 
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar("MET explorer"),
-    miniUI::miniContentPanel(
-      linkedBiplotUI("met")
+    miniUI::miniTabstripPanel( selected = "Data",
+     miniTabPanel("Data", icon = icon("table"),
+      miniContentPanel(padding = 0
+      )
+     ),
+    miniTabPanel("Plots", icon = icon("bar-chart"),
+      miniContentPanel(
+        #withProgress(message = "Generating plots ...", {
+          linkedBiplotUI("met")
+        #})
+    )),
+    miniTabPanel("Report", icon = icon("file-text-o"),
+                 miniContentPanel(padding = 0
+                 )
+    ),
+    miniTabPanel("Help", icon = icon("file-o"),
+    miniContentPanel(
+      helpPanel(fbhelp::list_tutorials("fbmet")[[1]])
+    )),
+    miniTabPanel("About", icon = icon("info"),
+    miniContentPanel(
+      helpPanel(fbhelp::list_tutorials("fbmet", name = "about")[[1]],
+                center = TRUE)
+    ))
     )
   )
 
@@ -26,9 +49,9 @@ metAddin <- function(){
     ndat <- with(plrv, dplyr::summarise(group_by(plrv, Genotype, Locality),
                              Yield = mean(Yield))
     )
-
-    metsel = callModule(met_selected, "met", plrv, model, ndat)
-
+    withProgress(message = "Generating plots ...", {
+      metsel = callModule(met_selected, "met", plrv, model, ndat)
+    })
     observeEvent(input$done, {
       stopApp()
     })

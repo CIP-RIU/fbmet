@@ -10,6 +10,7 @@
 #' @param model AMMI model
 #' @param ndat average data by genotype and environment
 #' @import agricolae
+# @import st4gi
 #' @import shiny
 #' @export
 met_selected <- function(input, output, session, raw, model, ndat){
@@ -116,20 +117,18 @@ met_selected <- function(input, output, session, raw, model, ndat){
   output$tai <- renderPlot({
     #trait, geno, env, rep, data
     trait = names(model$biplot)[2]
-    geno = "Genotype"
-    env = "Locality"
-    rep = "Rep"
+    geno = "geno"
+    env = "env"
+    rep = "rep"
     #print(head(mdata()))
     raw = cbind(raw, type = rep("GEN", nrow(raw)))
 
-    #print(fltDat())
     if (nrow(fltDat()) < nrow(raw)) {
       raw$type = as.character(raw$type)
       raw[raw$Genotype %in% rownames(fltDat()) , "type"] = "GENSEL"
       raw$type = as.factor(raw$type)
     }
-
-    #print(head(raw))
+    names(raw)[1:3] = c(geno, env, rep)
 
     gg_tai(trait, geno, env, rep, raw)
   })

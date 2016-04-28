@@ -10,23 +10,26 @@
 #' @param maxp Maximum allowed proportion of missing values to estimate, default is 10\%.
 #' @param conf Probability for the Tai limits.
 #' @param title Main title for plot.
-#' @param color Color for symbols, labels and lines.
-#' @param size Relative size for symbols and labels.
+#' @param color Color for symbols, labels and lines. Ignored; maintained for compatibility with original tai function.
+#' @param size Relative size for symbols and labels. Ignored; maintained for compatibility with original tai function.
+#' @param scaleSize logical. Whether dots should be scaled by trait value or not. Default is TRUE.
 #' @author Raul Eyzaguirre
-#' @author Reinhard Simon (transfer to ggplot)
+#' @author Reinhard Simon (transfer to ggplot2)
 #' @import st4gi
+#' @import ggplot2
+#' @import ggrepel
 #' @details The limits for alpha and lambda are computed using the mean squares from
 #' an ANOVA table for a RCBD with blocks nested into environments. If the data set is
 #' unbalanced, a warning is produced.
-#' @return It returns the Tai graph for stability analysis and the values of alpha
-#' and lambda for each genotype.
+#' @return It returns the Tai graph for stability analysis but not anymore the values of alpha
+#' and lambda for each genotype. Use 'tai' function.
 #' @references
 #' Tai, G. C. C. (1971). Genotypic Stability Analysis and Its Application to Potato
 #' Regional Trials, Crop Science, Vol 11.
 #' @export
 
 gg_tai <- function(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title = NULL,
-                color = c("darkorange", "black", "gray"), size = c(1, 1)) {
+                color = c("darkorange", "black", "gray"), size = c(1, 1), scaleSize = TRUE) {
 
   check.met <- function(trait, geno, env, rep, data) {
 
@@ -152,28 +155,21 @@ gg_tai <- function(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title =
   if (is.null(title))
     title <- paste("Tai stability analysis for: ", trait, sep = "")
 
-  # get_type <- function(lambda){
-  #   sample(c("GEN", "GENSEL"), length(lambda), repl=T,
-  #          c(.2, .8) )
-  # }
-
-  dat = as.data.frame(cbind(Genotype = names(lambda), lambda, alpha),
+  dat = as.data.frame(cbind(geno = names(lambda), lambda, alpha),
                       stringsAsFactors = FALSE)
   dat[, 1] = as.character(dat[, 1])
   dat[, 2] = as.numeric(dat[, 2])
   dat[, 3] = as.numeric(dat[, 3])
-  #dat[, 4] = as.factor(dat[, 4])
-  #dat = merge(dat, data)
-  xdat = data[!duplicated(data$Genotype), c("Genotype", trait, "type") ]
-  xdat[, 1] = as.character(xdat[, 1])
-  #print(head(dat))
-  #print(head(xdat))
-  dat = merge(dat, xdat)
-  dat$Genotype = as.factor(dat$Genotype)
-  # dat$alpha = as.numeric(as.character(dat$alpha))
-  # print(str(dat))
-  # print(head(dat))
-
+  if("type" %in% names(data)){
+    xdat = data[!duplicated(data$geno), c("geno", trait, "type") ]
+    xdat[, 1] = as.character(xdat[, 1])
+    dat = merge(dat, xdat)
+  } else {
+    xdat = data[!duplicated(data$geno), c("geno", trait) ]
+    xdat[, 1] = as.character(xdat[, 1])
+    dat = merge(dat, xdat)
+  }
+  dat$geno = as.factor(dat$geno)
 
   gg = ggplot(data = dat, aes(x=lambda, y=alpha)) +
     ggtitle(title) +
@@ -195,30 +191,23 @@ gg_tai <- function(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title =
    geom_vline(xintercept = qf((1 - conf) / 2, lc$ne - 2, lc$ne * lc$ng * (lc$nr - 1)),
                col = color[3] ) +
     geom_vline(xintercept = qf(1 - (1 - conf) / 2, lc$ne - 2, lc$ne * lc$ng * (lc$nr - 1)),
-               col = color[3] ) +
-    #geom_point( aes(col = color[1], size = dat[, 2]))
-    geom_point( aes(color = factor(dat$type), size = dat[, trait]))
+               col = color[3] )
+  if("type" %in% names(data) & scaleSize){
+    gg = gg + geom_point( aes(color = factor(dat$type), size = dat[, trait]))
+  }
+  if("type" %in% names(data) & !scaleSize){
+    gg = gg + geom_point( aes(color = factor(dat$type)))
+  }
+  if(!("type" %in% names(data)) & scaleSize){
+    gg = gg + geom_point( aes( size = dat[, trait]))
+  }
+  if(!("type" %in% names(data)) & !scaleSize){
+    gg = gg + geom_point()
+  }
 
-  gg = gg + geom_text_repel( aes(label = dat$Genotype,col = color[2] )) +
+  gg = gg + geom_text_repel( aes(label = dat$geno,col = color[2] )) +
     theme(legend.position = 'none')
 
   gg
-
-  # plot(1, type = "n", xlim = c(-0.05 * lmax, lmax), ylim = c(-amax, amax),
-  #      main = title, xlab = expression(lambda), ylab = expression(alpha))
-  # points(lambda, alpha, col = color[1], lwd = 2, pch = 4, cex = size[1])
-  # text(lambda, alpha, labels = names(alpha), col = color[2], pos = 1, offset = 0.3, cex = size[2])
-  # if (div2 > 0) {
-  #   points(lx, pi.alpha, type = "l", lty = 5, col = color[3])
-  #   points(lx, -pi.alpha, type = "l", lty = 5, col = color[3])
-  # }
-  # abline(v = qf((1 - conf) / 2, lc$ne - 2, lc$ne * lc$ng * (lc$nr - 1)),
-  #        lty = 5, col = color[3])
-  # abline(v = qf(1 - (1 - conf) / 2, lc$ne - 2, lc$ne * lc$ng * (lc$nr - 1)),
-  #        lty = 5, col = color[3])
-  #
-  # Output
-
-  #cbind(alpha, lambda)
 
 }

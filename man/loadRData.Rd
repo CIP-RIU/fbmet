@@ -2,7 +2,7 @@
 % Please edit documentation in R/loadRData.R
 \name{loadRData}
 \alias{loadRData}
-\title{Title}
+\title{loadRData}
 \usage{
 loadRData(fileName)
 }
@@ -13,7 +13,7 @@ loadRData(fileName)
 R object
 }
 \description{
-Title
+loadRData
 }
 \author{
 ricardo

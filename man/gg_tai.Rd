@@ -5,7 +5,8 @@
 \title{Tai's stability analysis}
 \usage{
 gg_tai(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title = NULL,
-  color = c("darkorange", "black", "gray"), size = c(1, 1))
+  color = c("darkorange", "black", "gray"), size = c(1, 1),
+  scaleSize = TRUE)
 }
 \arguments{
 \item{trait}{The trait to analyze.}
@@ -24,13 +25,15 @@ gg_tai(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title = NULL,
 
 \item{title}{Main title for plot.}
 
-\item{color}{Color for symbols, labels and lines.}
+\item{color}{Color for symbols, labels and lines. Ignored; maintained for compatibility with original tai function.}
 
-\item{size}{Relative size for symbols and labels.}
+\item{size}{Relative size for symbols and labels. Ignored; maintained for compatibility with original tai function.}
+
+\item{scaleSize}{logical. Whether dots should be scaled by trait value or not. Default is TRUE.}
 }
 \value{
-It returns the Tai graph for stability analysis and the values of alpha
-and lambda for each genotype.
+It returns the Tai graph for stability analysis but not anymore the values of alpha
+and lambda for each genotype. Use 'tai' function.
 }
 \description{
 This function runs Tai's stability analysis (Tai, G. C. C., 1971).
@@ -44,7 +47,7 @@ unbalanced, a warning is produced.
 \author{
 Raul Eyzaguirre
 
-Reinhard Simon (transfer to ggplot)
+Reinhard Simon (transfer to ggplot2)
 }
 \references{
 Tai, G. C. C. (1971). Genotypic Stability Analysis and Its Application to Potato

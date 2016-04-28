@@ -1,4 +1,4 @@
-#' Title
+#' loadRData
 #'
 #' @param fileName path to RData fiel
 #' @author ricardo

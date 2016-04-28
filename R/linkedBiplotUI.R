@@ -21,15 +21,12 @@ linkedBiplotUI <- function(id){
            HTML("<center/>"),
            ui_tips("tableTitle", "fbmet"),
            dataTableOutput(ns("plot_brushedpoints"))
-
     ),
     column(width = 5,
            ui_tips("taiTitle", "fbmet"),
            plotOutput(ns("tai"), height = 400),
            ui_tips("lineTitle", "fbmet"),
            plotOutput(ns("line"), height = 300)
-
-
     )
   )
 
