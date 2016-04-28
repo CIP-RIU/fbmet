@@ -35,7 +35,7 @@ shinyApp(
     model<- with(plrv, AMMI(Locality, Genotype, Rep, Yield, console=FALSE))
     ndat <- dplyr::summarise(group_by(plrv, Genotype, Locality), Yield = mean(Yield))
     withProgress(message = "Generating plots", {
-      metsel = callModule(met_selected, "met", model, ndat)
+      metsel = callModule(met_selected, "met", plrv, model, ndat)
     }
     )
 

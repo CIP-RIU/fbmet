@@ -15,3 +15,5 @@ lineTitle_hover: This plot has the mean trait values of all genotypes in separat
 histTitle_label: Trait histogram
 histTitle_hover: It shows a histogram of all genotype means. When genotypes are selected in
               the linked biplot they are overlayed in a distinct color.
+taiTitle_label: Tai plot
+taiTitle_hover: Stability analysis.

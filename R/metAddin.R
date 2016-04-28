@@ -27,7 +27,7 @@ metAddin <- function(){
                              Yield = mean(Yield))
     )
 
-    metsel = callModule(met_selected, "met", model, ndat)
+    metsel = callModule(met_selected, "met", plrv, model, ndat)
 
     observeEvent(input$done, {
       stopApp()

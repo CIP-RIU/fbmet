@@ -4,7 +4,7 @@
 \alias{met_selected}
 \title{met_selected}
 \usage{
-met_selected(input, output, session, model, ndat)
+met_selected(input, output, session, raw, model, ndat)
 }
 \arguments{
 \item{input}{shiny input}
@@ -12,6 +12,8 @@ met_selected(input, output, session, model, ndat)
 \item{output}{shiny output}
 
 \item{session}{shiny session}
+
+\item{raw}{raw data}
 
 \item{model}{AMMI model}
 

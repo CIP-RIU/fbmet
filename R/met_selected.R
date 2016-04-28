@@ -6,12 +6,13 @@
 #' @param input shiny input
 #' @param output shiny output
 #' @param session shiny session
+#' @param raw raw data
 #' @param model AMMI model
 #' @param ndat average data by genotype and environment
 #' @import agricolae
 #' @import shiny
 #' @export
-met_selected <- function(input, output, session, model, ndat){
+met_selected <- function(input, output, session, raw, model, ndat){
 
   mm = round(model$biplot[, c(2:ncol(model$biplot))], 5)
   model$biplot[, c(2:ncol(model$biplot)) ] = mm
@@ -103,11 +104,35 @@ met_selected <- function(input, output, session, model, ndat){
   })
 
   output$plot_brushedpoints <- renderDataTable({
-    fltDat()
+    dat = fltDat()
+    data = cbind(rownames(dat), dat)
+    names(dat)[1] = "Genotype"
+    dat
   }, options = list(searching = FALSE,
     lengthMenu = list(c(5, 10, 15, -1), c('5', '10','15', 'All')),
     pageLength = 5)
   )
+
+  output$tai <- renderPlot({
+    #trait, geno, env, rep, data
+    trait = names(model$biplot)[2]
+    geno = "Genotype"
+    env = "Locality"
+    rep = "Rep"
+    #print(head(mdata()))
+    raw = cbind(raw, type = rep("GEN", nrow(raw)))
+
+    #print(fltDat())
+    if (nrow(fltDat()) < nrow(raw)) {
+      raw$type = as.character(raw$type)
+      raw[raw$Genotype %in% rownames(fltDat()) , "type"] = "GENSEL"
+      raw$type = as.factor(raw$type)
+    }
+
+    #print(head(raw))
+
+    gg_tai(trait, geno, env, rep, raw)
+  })
 
 
   observeEvent(input$plot_dblclick, {
