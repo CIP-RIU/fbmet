@@ -20,7 +20,9 @@ shinyApp(
         tabPanel("Plots",
                 linkedBiplotUI("met")
                 ),
-        tabPanel("Report"),
+        tabPanel("Report",
+                uiOutput("metReport")
+        ),
         tabPanel("Help",
                  helpPanel(fbhelp::list_tutorials("fbmet")[[1]])
                 ),
@@ -197,5 +199,26 @@ shinyApp(
       })
     }
     })
+
+  output$metReport <- renderUI({
+    # dirfiles <- system.file(package = "pepa")
+    # fileRmd <- paste(dirfiles, "/rmd/met.Rmd", sep = "")
+    # #fileURL <- paste(dirfiles, "/rmd/met.html", sep = "")
+    # dat = met_raw()
+    #
+    # filePath = rmarkdown::render(fileRmd, params = list(traits = get_met_traits(),
+    #                                          geno = "Genotype",
+    #                                          env = "Locality",
+    #                                          rep = "Rep",
+    #                                          data = dat,
+    #                                          maxp = .1,
+    #                                          author = "CIP"))
+    # tags$div(style = "max-width: 800px;",
+    #          includeHTML(
+    #            filePath
+    #          )
+    # )
+  })
+
 }
 )
