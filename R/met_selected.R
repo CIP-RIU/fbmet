@@ -14,7 +14,14 @@
 #' @import shiny
 #' @export
 met_selected <- function(input, output, session, raw, model, ndat){
-
+  #
+  #print(str(model))
+  if(is.function(raw)) {
+    raw = raw()
+    model = model()
+    ndat = ndat()
+  }
+  #if(is.null(model$biplot)) return(NULL)
   mm = round(model$biplot[, c(2:ncol(model$biplot))], 5)
   model$biplot[, c(2:ncol(model$biplot)) ] = mm
 
@@ -106,7 +113,7 @@ met_selected <- function(input, output, session, raw, model, ndat){
 
   output$plot_brushedpoints <- renderDataTable({
     dat = fltDat()
-    data = cbind(rownames(dat), dat)
+    dat = cbind(rownames(dat), dat)
     names(dat)[1] = "Genotype"
     dat
   }, options = list(searching = FALSE,
@@ -115,12 +122,11 @@ met_selected <- function(input, output, session, raw, model, ndat){
   )
 
   output$tai <- renderPlot({
-    #trait, geno, env, rep, data
     trait = names(model$biplot)[2]
     geno = "geno"
     env = "env"
     rep = "rep"
-    #print(head(mdata()))
+
     raw = cbind(raw, type = rep("GEN", nrow(raw)))
 
     if (nrow(fltDat()) < nrow(raw)) {
@@ -129,6 +135,7 @@ met_selected <- function(input, output, session, raw, model, ndat){
       raw$type = as.factor(raw$type)
     }
     names(raw)[1:3] = c(geno, env, rep)
+    #print(head(raw, 20))
 
     gg_tai(trait, geno, env, rep, raw)
   })

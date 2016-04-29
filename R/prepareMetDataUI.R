@@ -23,20 +23,21 @@ prepareMetDataUI <- function(id){
              #verbatimTextOutput('filepaths')
             ),
 
-           radioButtons("metTraitOrIndex", "Variable to analyze:",
-                        choices = c("trait", "Elston"),
-                        selected = "trait",
-                        inline = TRUE),
-           conditionalPanel(
-             condition = "input.metTraitOrIndex == 'trait'",
-             uiOutput("met_traits")
-           ),
-
-           conditionalPanel(
-             condition = "input.metTraitOrIndex == 'Elston'",
-            uiOutput("met_elston_neg"),
-            uiOutput("met_elston_pos")
-           )
+           # radioButtons("metTraitOrIndex", "Variable to analyze:",
+           #              choices = c("trait", "Elston"),
+           #              selected = "trait",
+           #              inline = TRUE),
+           # conditionalPanel(
+           #   condition = "input.metTraitOrIndex == 'trait'",
+             uiOutput("met_traits"),
+           verbatimTextOutput('logs')
+           # ),
+           #
+           # conditionalPanel(
+           #   condition = "input.metTraitOrIndex == 'Elston'",
+           #  uiOutput("met_elston_neg"),
+           #  uiOutput("met_elston_pos")
+           # )
            ),
     column(width = 9,
            DT::dataTableOutput("met_raw")
