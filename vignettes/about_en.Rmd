@@ -9,16 +9,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Credits
-
-### Idea: Reinhard Simon
-
-### Programming: Reinhard Simon
-
-### Statistical packages used
-
-- agricolae (F. Mendiburu)
-- st4gi (R. Eyzaguirre)
 
 ### Programming platform
 - R
