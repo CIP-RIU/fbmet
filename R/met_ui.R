@@ -13,14 +13,14 @@ met_ui <- function(title = "MET explorer"){
           tabPanel("Plots",
                    linkedBiplotUI("met")
           ),
-          tabPanel("Report",
-                   uiOutput("metReport")
-          ),
+          # tabPanel("Report",
+          #          uiOutput("metReport")
+          # ),
           tabPanel("Help",
-                   helpPanel(list_tutorials("fbmet")[[1]])
+                   helpPanel(fbhelp::list_tutorials("fbmet")[[1]])
           ),
           tabPanel("About",
-                   helpPanel(list_tutorials("fbmet", name = "about")[[1]],
+                   helpPanel(fbhelp::list_tutorials("fbmet", name = "about")[[1]],
                              center = TRUE)
           )
   )
