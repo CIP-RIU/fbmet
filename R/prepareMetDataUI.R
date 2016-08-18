@@ -11,17 +11,18 @@ prepareMetDataUI <- function(id){
   shiny::fluidRow(
     column(width = 3,
            #ui_tips("metFileTitle", "fbmet"),
-           selectInput("met_crop", "Crop", c("potato", "sweetpotato")),
-           radioButtons("met_source", "Data source:",
-                        choices = c("File", "Previous", "Cache","BRAPI DB"),
-                        selected = "File", inline = TRUE),
-           conditionalPanel(
-             condition = "input.met_source == 'File'",
-              shinyFiles::shinyFilesButton('file', 'File select',
-                'Please select a file', TRUE
-              )#,
+           #selectInput("met_crop", "Crop", c("potato", "sweetpotato")),
+           # radioButtons("met_source", "Data source:",
+           #              choices = c("File" #, "Previous", "Cache","BRAPI DB"
+           #                          ),
+           #              selected = "File", inline = TRUE),
+           #conditionalPanel(
+             #condition = "input.met_source == 'File'",
+              shinyFiles::shinyFilesButton('csv_file', 'CSV files',
+                'Please select a set of files', TRUE
+              ),
              #verbatimTextOutput('filepaths')
-            ),
+            #),
 
            # radioButtons("metTraitOrIndex", "Variable to analyze:",
            #              choices = c("trait", "Elston"),

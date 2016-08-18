@@ -10,10 +10,10 @@
 met_sv <- function(input, output, session, values){
   volumes <- getVolumes(c("(E:)", "Page File (F:)"))
   #print(volumes)
-  shinyFileChoose(input, 'file', roots=volumes, session=session)
+  shinyFileChoose(input, 'csv_file', roots=volumes, session=session)
 
   metFiles <- reactive({
-    mf = parseFilePaths(volumes, input$file)$datapath
+    mf = parseFilePaths(volumes, input$csv_file)$datapath
     mf = as.character(mf)
     mf
   })
