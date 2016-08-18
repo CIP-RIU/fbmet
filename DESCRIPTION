@@ -30,3 +30,4 @@ Suggests:
     shinyFiles
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
+Remotes: c5sire/BiocStyle, cran/shinyBS
