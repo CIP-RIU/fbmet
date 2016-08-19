@@ -10,7 +10,7 @@ prepareMetDataUI <- function(id){
     column(width = 3,
            fbhelp::ui_tips("getFieldbooks", "fbmet"),
                 shinyFiles::shinyFilesButton('dc_fieldbook',
-                                             'Fieldbook (DataCollector)',
+                                             'Fieldbook',
 
                                             'Please select a set of fieldbooks', TRUE
                ),
