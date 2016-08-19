@@ -13,9 +13,9 @@ met_ui <- function(title = "MET explorer"){
           tabPanel("Plots",
                    linkedBiplotUI("met")
           ),
-          # tabPanel("Report",
-          #          uiOutput("metReport")
-          # ),
+          tabPanel("Report",
+                   uiOutput("metReport")
+          ),
           tabPanel("Help",
                    helpPanel(fbhelp::list_tutorials("fbmet")[[1]])
           ),

@@ -6,20 +6,41 @@
 #'
 #' @return dataframe
 #' @export
-combine_books <- function(books) {
+combine_books <- function(books, fmt = ".xls") {
+  dat = NULL
+  try({
   n = length(books)
-  dat = read.csv(books[1])
-  add_locality_name <- function(dat, book) {
-    fn = basename(book)
-    fn = stringr::str_replace(fn, ".csv", "")
+  #dat = NULL
+  if(fmt == ".xls"){
+    dat = readxl::read_excel(books[1], sheet = "Fieldbook")
+  }
+  if(fmt == ".csv"){
+    dat = read.csv(books[1])
+  }
+
+  add_locality_name <- function(dat, book, fmt = ".xls") {
+    if(fmt == ".csv"){
+      fn = basename(book)
+      fn = stringr::str_replace(fn, fmt, "")
+    }
+    if(fmt == ".xls"){
+      fn = readxl::read_excel(book, sheet = "Minimal")[1, "Value"]
+      fn = as.character(fn)
+    }
     cbind(Locality = fn, dat)
   }
   dat = add_locality_name(dat, books[1])
 
+  fin = ""
   for(i in 2:n){
-    fin = read.csv(books[i])
-    fin = add_locality_name(fin, books[i])
+    #print(i)
+    if(fmt == ".csv") fin = read.csv(books[i])
+    if(fmt == ".xls") fin = readxl::read_excel(books[i], sheet = "Fieldbook")
+
+    fin = add_locality_name(fin, books[i], fmt)
     dat = rbind(dat, fin)
   }
+  })
   dat
 }
+

@@ -6,41 +6,25 @@
 #' @return shiny fluid row
 #' @export
 prepareMetDataUI <- function(id){
-  #ns <- shiny::NS(id)
-
   shiny::fluidRow(
     column(width = 3,
-           #ui_tips("metFileTitle", "fbmet"),
-           #selectInput("met_crop", "Crop", c("potato", "sweetpotato")),
-           # radioButtons("met_source", "Data source:",
-           #              choices = c("File" #, "Previous", "Cache","BRAPI DB"
-           #                          ),
-           #              selected = "File", inline = TRUE),
-           #conditionalPanel(
-             #condition = "input.met_source == 'File'",
-              shinyFiles::shinyFilesButton('csv_file', 'CSV files',
-                'Please select a set of files', TRUE
-              ),
-             #verbatimTextOutput('filepaths')
-            #),
+           fbhelp::ui_tips("getFieldbooks", "fbmet"),
+                shinyFiles::shinyFilesButton('dc_fieldbook',
+                                             'Fieldbook (DataCollector)',
 
-           # radioButtons("metTraitOrIndex", "Variable to analyze:",
-           #              choices = c("trait", "Elston"),
-           #              selected = "trait",
-           #              inline = TRUE),
-           # conditionalPanel(
-           #   condition = "input.metTraitOrIndex == 'trait'",
-             uiOutput("met_traits"),
-           verbatimTextOutput('logs')
-           # ),
-           #
-           # conditionalPanel(
-           #   condition = "input.metTraitOrIndex == 'Elston'",
-           #  uiOutput("met_elston_neg"),
-           #  uiOutput("met_elston_pos")
-           # )
+                                            'Please select a set of fieldbooks', TRUE
+               ),
+              #shiny::uiOutput("ui_met_genotype"),
+
+             #verbatimTextOutput('filepaths'),
+             br(),
+             uiOutput("ui_met_env"),
+             uiOutput("ui_met_plt"),
+             uiOutput("ui_met_rep"),
+             uiOutput("ui_met_gen"),
+             uiOutput("ui_met_trt")#
            ),
-    column(width = 9,
+          column(width = 9,
            DT::dataTableOutput("met_raw")
            )
   )

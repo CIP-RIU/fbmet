@@ -10,103 +10,81 @@
 met_sv <- function(input, output, session, values){
   volumes <- getVolumes(c("(E:)", "Page File (F:)"))
   #print(volumes)
-  shinyFileChoose(input, 'csv_file', roots=volumes, session=session)
+  shinyFileChoose(input, 'dc_fieldbook', roots=volumes, session=session)
 
   metFiles <- reactive({
-    mf = parseFilePaths(volumes, input$csv_file)$datapath
+    req(input$dc_fieldbook)
+    mf = parseFilePaths(volumes, input$dc_fieldbook)$datapath
     mf = as.character(mf)
     mf
   })
+
   output$filepaths <- renderPrint({metFiles()})
 
-  met_raw <- reactive({
+  met_bks <- reactive({
     bks = metFiles()
-    if(length(bks)==0) return(NULL)
-    dat <- combine_books(bks)
-    for(i in 4:ncol(dat)){
-      dat[, i] = round(dat[, i], 5)
-    }
+    if(length(bks) <= 4) return(NULL)
+    dat <- withProgress({
+      combine_books(bks)
+    }, message = "Combining fieldbooks")
+
+    if(is.null(dat)) return(NULL)
+     dat
+  })
+
+  colNms <- reactive({
+    req(met_bks())
+    names(met_bks())
+  })
+
+  output$ui_met_env <- renderUI({
+    req(colNms())
+    shiny::selectInput("met_env", label = "Environment", colNms()[1:5], colNms()[1])
+  })
+
+  output$ui_met_plt <- renderUI({
+    req(colNms())
+    shiny::selectInput("met_plt", label = "Plot", colNms()[1:5], colNms()[2])
+  })
+
+  output$ui_met_rep <- renderUI({
+    req(colNms())
+    shiny::selectInput("met_rep", label = "Replication", colNms()[1:5], colNms()[3])
+  })
+
+
+  output$ui_met_gen <- renderUI({
+    req(colNms())
+    shiny::selectInput("met_gen", label = "Genotype", colNms()[1:5], colNms()[4])
+  })
+
+  output$ui_met_trt <- renderUI({
+    req(colNms())
+    shiny::selectInput("met_trt", label = "Trait", colNms(), colNms()[5], multiple = TRUE)
+  })
+
+  met_dat <- reactive({
+    req(met_bks())
+    dat = met_bks()[, c(input$met_env, input$met_plt, input$met_rep,
+                  input$met_gen, input$met_trt[1])]
+    dat[, input$met_env] = sapply(dat[, input$met_env], as.factor)
+    dat[, input$met_gen] = sapply(dat[, input$met_gen], as.factor)
     dat
   })
 
-  met_active <- reactive({
-    out = NULL
-    #if(input$metTraitOrIndex == "trait"){
-    act_trait = input$met_trait
-    #print(str(act_trait))
-    if(length(act_trait) == 0) return(met_raw()[, 1:3])
-    if(is.null(act_trait)) return(met_raw()[, 1:3])
-    if(act_trait == "") return(met_raw()[, 1:3])
-    #print(paste0("active ", act_trait))
-    nm = c(names(met_raw())[1:3], act_trait)
-    #print(str(nm))
-    out = met_raw()[, nm]
-    #}
-    # if(input$metTraitOrIndex == "Elston"){
-    #   act_en = input$met_en
-    #   print(act_en)
-    #   act_ep = input$met_ep
-    #   print(act_ep)
-    #   if(length(act_en) == 0 & length(act_ep) == 0){
-    #     return(met_raw()[, 1:3])
-    #   }
-    #   if(length(act_en) > 0 & length(act_ep) == 0){
-    #     x = met_raw()[, act_en]
-    #     x = x * -1
-    #     if(is.vector(x)){
-    #       out = cbind(met_raw()[, 1:3], x)
-    #       names(out)[4] = act_en
-    #     } else{
-    #       out = cbind(met_raw()[, 1:3], x[act_en])
-    #     }
-    #
-    #   }
-    #   if(length(act_en) == 0 & length(act_ep) > 0) {
-    #     x = met_raw()[, act_ep]
-    #     if(is.vector(x)){
-    #       out = cbind(met_raw()[, 1:3], x)
-    #       names(out)[4] = act_ep
-    #     } else{
-    #       out = cbind(met_raw()[, 1:3], x[act_ep])
-    #     }
-    #   }
-    #   if(length(act_en) > 0 & length(act_ep) > 0) {
-    #     x = met_raw()[, act_en]
-    #     x = x * -1
-    #     y = met_raw()[, act_ep]
-    #     #out = cbind(met_raw()[, 1:3], x[act_en], y[act_ep])
-    #     if(is.vector(x)){
-    #       out = cbind(met_raw()[, 1:3], x)
-    #       names(out)[4] = act_en
-    #     } else{
-    #       out = cbind(met_raw()[, 1:3], x[act_en])
-    #     }
-    #     if(is.vector(y)){
-    #       out = cbind(out, y)
-    #       names(out)[ncol(out)] = act_ep
-    #     } else {
-    #       out = cbind(out, y[act_ep])
-    #     }
-    #
-    #     if(ncol(out) > 3){
-    #       trt = names(out)[3:ncol(out)]
-    #       els = st4gi::elston(trt, names(out)[2], names(out)[1], names(out)[3],
-    #                           data = out)
-    #       #out = cbind(out, Elston = els)
-    #       #out = merge(out, els$)
-    #     }
-    #
-    #   }
-
-
-    #}
-
-    #write.csv(out, file = "out.csv")
-    out
+  met_data <- reactive({
+    req(met_bks())
+    dat = met_bks()[, c(input$met_env, input$met_plt, input$met_rep,
+                        input$met_gen, input$met_trt)]
+    dat[, input$met_env] = sapply(dat[, input$met_env], as.factor)
+    dat[, input$met_gen] = sapply(dat[, input$met_gen], as.factor)
+    dat
   })
 
+
   output$met_raw <- DT::renderDataTable({
-    met_active()
+    #met_active()
+    met_data()
   }
   ,#filter = "top",
   options = list(searching = TRUE,
@@ -115,49 +93,62 @@ met_sv <- function(input, output, session, values){
                  pageLength = 10)
   )
 
-  get_met_traits <- reactive({
-    dat = metFiles()
-    if(length(dat)==0) return(NULL)
-    names(met_raw())[4:ncol(met_raw())]
-  })
-
-  output$met_traits <- renderUI({
-    traits <- get_met_traits()
-    if(!is.null(traits)) {
-      last_trait = last(traits)
-    } else {
-      last_trait = NULL
-    }
-    selectInput("met_trait", label = "Trait:", choices = traits,
-                selected = last_trait)
-  })
-
-  output$met_elston_neg <- renderUI({
-    traits <- get_met_traits()
-    selectizeInput("met_en", label = "Negative traits:", choices = traits,
-                   multiple = TRUE)
-  })
-
-  # plrv =  loadRData((system.file("data/plrv.rda", package="agricolae")))
-  # model<- with(plrv, AMMI(Locality, Genotype, Rep, Yield, console = FALSE))
-  # ndat <- dplyr::summarise(group_by(plrv, Genotype, Locality), Yield = mean(Yield))
-
+  # get_met_traits <- reactive({
+  #   dat = metFiles()
+  #   if(length(dat)==0) return(NULL)
+  #   names(met_raw())[4:ncol(met_raw())]
+  # })
+  #
+  # output$met_traits <- renderUI({
+  #   req(input$dc_fieldbook)
+  #   traits <- get_met_traits()
+  #   if(!is.null(traits)) {
+  #     last_trait = last(traits)
+  #   } else {
+  #     last_trait = NULL
+  #   }
+  #   selectInput("met_trait", label = "Trait:", choices = traits,
+  #               selected = last_trait)
+  # })
+  #
+  # output$met_elston_neg <- renderUI({
+  #   traits <- get_met_traits()
+  #   selectizeInput("met_en", label = "Negative traits:", choices = traits,
+  #                  multiple = TRUE)
+  # })
+  #
+  # # plrv =  loadRData((system.file("data/plrv.rda", package="agricolae")))
+  # # model<- with(plrv, AMMI(Locality, Genotype, Rep, Yield, console = FALSE))
+  # # ndat <- dplyr::summarise(group_by(plrv, Genotype, Locality), Yield = mean(Yield))
+  #
   mdl <- reactive({
-    dat = met_active()
+    dat = met_dat()
 
+    #withProgress(message = "Calculating ...", {
     if(is.null(dat)) return(NULL)
-    trt = input$met_trait
+    trt = input$met_trt[1]
+    gen = input$met_gen
+    rep = input$met_rep
+    env = input$met_env
     if(length(trt) == 0) return(NULL)
     if(trt == "") return(NULL)
-    dat = dat[, c(2, 1, 3, 4)]
-    model <- AMMI(dat$Locality, dat$Genotype, dat$Rep, dat[, trt], console = FALSE)
+    #dat = dat[, c(2, 1, 3, 4)]
+    #model <- AMMI(dat$Locality, dat$Genotype, dat$Rep, dat[, trt], console = FALSE)
+    model <- AMMI(dat[, env], dat[, gen], dat[, rep], dat[, trt], console = FALSE)
     names(model$biplot)[2] = trt
     #ndat <- dplyr::summarise(group_by(dat, Genotype, Locality), Yield = mean(trt))
     ndat = model$means
     names(ndat)[1:3] = c("Locality", "Genotype", trt)
     ndat = ndat[, c(2,1,3)]
-    list(dat, model, ndat)
+    #})
+    out = list(dat, model, ndat)
+
+    #print(out)
+
+    out
+
   })
+
 
   observe({
 
@@ -173,23 +164,31 @@ met_sv <- function(input, output, session, values){
   })
 
   output$metReport <- renderUI({
-    # dirfiles <- system.file(package = "pepa")
-    # fileRmd <- paste(dirfiles, "/rmd/met.Rmd", sep = "")
+    req(input$met_trt)
+  withProgress({
+    try({
+    dirfiles <- system.file(package = "pepa")
+    fileRmd <- paste(dirfiles, "/rmd/met.Rmd", sep = "")
     # #fileURL <- paste(dirfiles, "/rmd/met.html", sep = "")
-    # dat = met_raw()
-    #
-    # filePath = rmarkdown::render(fileRmd, params = list(traits = get_met_traits(),
-    #                                          geno = "Genotype",
-    #                                          env = "Locality",
-    #                                          rep = "Rep",
-    #                                          data = dat,
-    #                                          maxp = .1,
-    #                                          author = "CIP"))
-    # tags$div(style = "max-width: 800px;",
-    #          includeHTML(
-    #            filePath
-    #          )
-    # )
+    dat = met_data()
+
+    filePath = rmarkdown::render(fileRmd, params = list(traits = input$met_trt,
+                                             geno = input$met_gen,
+                                             env = input$met_env,
+                                             rep = input$met_rep,
+                                             data = dat,
+                                             maxp = .1,
+                                             title = "Automatic report for a MET with a RCBD",
+                                             subtitle = NULL,
+                                             #format = "html_document",
+                                             author = "CIP"))
+    tags$div(style = "max-width: 800px;",
+             includeHTML(
+               filePath
+             )
+    )
+    })
+  }, message = "Creating Multi Enviroment Report...")
   })
 
 

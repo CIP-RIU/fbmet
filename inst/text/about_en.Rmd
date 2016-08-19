@@ -13,7 +13,7 @@ vignette: >
 
 ### Idea: Reinhard Simon
 
-### Programming: Reinhard Simon
+### Programming: Reinhard Simon, R. Eyzaguirre
 
 ### Statistical packages used
 
