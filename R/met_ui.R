@@ -6,6 +6,8 @@
 #' @return
 #' @export
 met_ui <- function(title = "MET explorer"){
+  tagList(
+  h2(title),
   tabBox( width = 12, selected = "Data",
           tabPanel("Data",
                    prepareMetDataUI("data")
@@ -24,5 +26,6 @@ met_ui <- function(title = "MET explorer"){
           #          helpPanel(fbhelp::list_tutorials("fbmet", name = "about")[[1]],
           #                    center = TRUE)
           # )
+  )
   )
 }
