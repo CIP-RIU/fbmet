@@ -4,8 +4,6 @@
 #' @param output shiny output
 #' @param session shiny session
 #' @param values shiny values
-#'
-#' @return
 #' @export
 met_sv <- function(input, output, session, values){
   volumes <- getVolumes(c("(E:)", "Page File (F:)"))

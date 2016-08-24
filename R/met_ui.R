@@ -3,7 +3,7 @@
 #'
 #' @param title string for caption
 #'
-#' @return
+#' @return shiny tagList
 #' @export
 met_ui <- function(title = "MET explorer"){
   tagList(

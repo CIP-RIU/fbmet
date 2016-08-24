@@ -9,6 +9,9 @@ met_ui(title = "MET explorer")
 \arguments{
 \item{title}{string for caption}
 }
+\value{
+shiny tagList
+}
 \description{
 met_ui
 }
