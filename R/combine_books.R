@@ -6,12 +6,19 @@
 #'
 #' @return dataframe
 #' @export
-combine_books <- function(books, fmt = ".xls") {
+combine_books <- function(books, fmt = NULL) {
   dat = NULL
+  if(is.null(fmt)){
+    bn = basename(books[1])
+    fmt = paste0(".", stringr::str_split(bn, "\\.")[[1]][[2]])
+  }
   try({
   n = length(books)
   #dat = NULL
   if(fmt == ".xls"){
+    dat = readxl::read_excel(books[1], sheet = "Fieldbook")
+  }
+  if(fmt == ".xlsx"){
     dat = readxl::read_excel(books[1], sheet = "Fieldbook")
   }
   if(fmt == ".csv"){
@@ -27,15 +34,21 @@ combine_books <- function(books, fmt = ".xls") {
       fn = readxl::read_excel(book, sheet = "Minimal")[1, "Value"]
       fn = as.character(fn)
     }
+    if(fmt == ".xlsx"){
+      fn = readxl::read_excel(book, sheet = "Minimal")[2, "Value"]
+      fn = as.character(fn)
+    }
+
     cbind(Locality = fn, dat)
   }
-  dat = add_locality_name(dat, books[1])
+  dat = add_locality_name(dat, books[1], fmt)
 
   fin = ""
   for(i in 2:n){
     #print(i)
     if(fmt == ".csv") fin = read.csv(books[i])
     if(fmt == ".xls") fin = readxl::read_excel(books[i], sheet = "Fieldbook")
+    if(fmt == ".xlsx") fin = readxl::read_excel(books[i], sheet = "Fieldbook")
 
     fin = add_locality_name(fin, books[i], fmt)
     dat = rbind(dat, fin)
