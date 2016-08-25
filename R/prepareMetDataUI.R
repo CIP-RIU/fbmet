@@ -11,12 +11,8 @@ prepareMetDataUI <- function(id){
            fbhelp::ui_tips("getFieldbooks", "fbmet"),
                 shinyFiles::shinyFilesButton('dc_fieldbook',
                                              'Fieldbook',
-
                                             'Please select a set of fieldbooks', TRUE
                ),
-              #shiny::uiOutput("ui_met_genotype"),
-
-             #verbatimTextOutput('filepaths'),
              br(),
              uiOutput("ui_met_env"),
              uiOutput("ui_met_plt"),

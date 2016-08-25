@@ -4,7 +4,7 @@
 \alias{combine_books}
 \title{combine_books}
 \usage{
-combine_books(books, fmt = ".xls")
+combine_books(books, fmt = NULL)
 }
 \arguments{
 \item{books}{a simple table}
