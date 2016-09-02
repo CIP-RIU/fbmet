@@ -8,7 +8,7 @@
 met_sv <- function(input, output, session, values){
   volumes <- getVolumes(c("(E:)", "Page File (F:)"))
   #print(volumes)
-  shinyFileChoose(input, 'dc_fieldbook', roots=volumes, session=session)
+  shinyFileChoose(input, 'dc_fieldbook', roots=volumes, session=session )
 
   metFiles <- reactive({
     req(input$dc_fieldbook)
