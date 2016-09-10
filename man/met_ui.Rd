@@ -4,7 +4,7 @@
 \alias{met_ui}
 \title{met_ui}
 \usage{
-met_ui(title = "MET explorer")
+met_ui(title = "MET analytical graphics")
 }
 \arguments{
 \item{title}{string for caption}

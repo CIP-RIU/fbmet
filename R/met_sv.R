@@ -58,7 +58,7 @@ met_sv <- function(input, output, session, values){
 
   output$ui_met_trt <- renderUI({
     req(colNms())
-    shiny::selectInput("met_trt", label = "Trait", colNms(), colNms()[5], multiple = TRUE)
+    shiny::selectInput("met_trt", label = "Trait", colNms(), colNms()[5], multiple = FALSE) # TODO multiple for Sel. Ind.
   })
 
   met_dat <- reactive({
