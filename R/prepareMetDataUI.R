@@ -8,7 +8,8 @@
 prepareMetDataUI <- function(id){
   shiny::fluidRow(
     column(width = 3,
-           fbhelp::ui_tips("getFieldbooks", "fbmet"),
+           #fbhelp::ui_tips("getFieldbooks", "fbmet"),
+           h3("Fieldbook selection"),
                 shinyFiles::shinyFilesButton('dc_fieldbook',
                                              'Fieldbook',
                                             'Please select a set of fieldbooks', TRUE
