@@ -6,7 +6,7 @@
 #' @return shiny tagList
 #' @export
 met_ui <- function(title = "MET analytical graphics"){
-  tagList(
+  tabItem(
   h2(title),
   tabBox( width = 12, selected = "Data",
           tabPanel("Data",
