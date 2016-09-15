@@ -1,3 +1,19 @@
+# TODO move this to fbglobal!
+extract_params <- function(cn) {
+
+  gti= which(stringr::str_detect(cn, "CODE|INSTN|GENOTYPE|GENO|GERMPLASMNAME|CIPNUMBER"))[1]
+  bki= which(stringr::str_detect(cn, "BLOCK|BLK|BLOC" ))[1]
+  rpi= which(stringr::str_detect(cn, "REP|REPL|REPLICATION" ))[1]
+  pti= which(stringr::str_detect(cn, "PLOT|PLT" ))[1]
+  lti= which(stringr::str_detect(cn, "LOCALITY" ))[1]
+  ci = 1:length(cn)
+  tti= ci[!ci %in% c(gti, bki, rpi, pti, lti)]
+  tn = cn[tti] %>% sort(decreasing = TRUE)
+  list(tn = tn,tti = tti, gti = gti,bki = bki, rpi = rpi, pti= pti, lti = lti, ci = ci)
+}
+
+
+
 #' met_sv
 #'
 #' @param input shiny input
@@ -27,51 +43,85 @@ met_sv <- function(input, output, session, values){
     }, message = "Combining fieldbooks")
 
     if(is.null(dat)) return(NULL)
+    names(dat) <- names(dat) %>% toupper()
      dat
   })
 
   colNms <- reactive({
     req(met_bks())
-    names(met_bks())
+    names(met_bks()) #%>% toupper()
+  })
+
+  ep <- reactive({
+    cn = colNms()
+    extract_params(cn)
   })
 
   output$ui_met_env <- renderUI({
-    req(colNms())
-    shiny::selectInput("met_env", label = "Environment", colNms()[1:5], colNms()[1])
+    req(met_bks())
+    req(ep())
+    #mi = min(ep()$ci, 4)
+    mi  = 4
+    cn = colNms()
+    shiny::selectInput("met_env", label = "Environment", cn[1:mi], cn[ep()$lti])
   })
 
   output$ui_met_plt <- renderUI({
-    req(colNms())
-    shiny::selectInput("met_plt", label = "Plot", colNms()[1:5], colNms()[2])
+    req(met_bks())
+    req(ep())
+    print(ep())
+    # message(ep())
+    # message(colNms())
+    #mi = min(ep()$ci, 4)
+    mi = 4
+    cn = colNms()
+    shiny::selectInput("met_plt", label = "Plot", cn[1:mi], cn[ep()$pti])
   })
 
   output$ui_met_rep <- renderUI({
-    req(colNms())
-    shiny::selectInput("met_rep", label = "Replication", colNms()[1:5], colNms()[3])
+    req(met_bks())
+    req(ep())
+    #mi = min(ep()$ci, 4)
+    mi = 4
+    cn = colNms()
+    shiny::selectInput("met_rep", label = "Replication", cn[1:mi], cn[ep()$rpi])
   })
 
 
   output$ui_met_gen <- renderUI({
-    req(colNms())
-    shiny::selectInput("met_gen", label = "Genotype", colNms()[1:5], colNms()[4])
+    req(met_bks())
+    req(ep())
+    #mi = min(ep()$ci, 5)
+    mi = 4
+    cn = colNms()
+    shiny::selectInput("met_gen", label = "Genotype", cn[1:mi], cn[ep()$gti])
   })
 
   output$ui_met_trt <- renderUI({
-    req(colNms())
-    shiny::selectInput("met_trt", label = "Trait", colNms(), colNms()[5], multiple = FALSE) # TODO multiple for Sel. Ind.
+    req(met_bks())
+    req(ep())
+    #mi = min(ep()$ci, 5)
+    shiny::selectInput("met_trt", label = "Trait", ep()$tn, multiple = FALSE) # TODO multiple for Sel. Ind.
   })
 
-  met_dat <- reactive({
-    req(met_bks())
-    dat = met_bks()[, c(input$met_env, input$met_plt, input$met_rep,
-                  input$met_gen, input$met_trt[1])]
-    dat[, input$met_env] = sapply(dat[, input$met_env], as.factor)
-    dat[, input$met_gen] = sapply(dat[, input$met_gen], as.factor)
-    dat
-  })
+  # met_dat <- reactive({
+  #   req(met_bks())
+  #   req(ep())
+  #   dat = met_bks()[, c(input$met_env, input$met_plt, input$met_rep,
+  #                 input$met_gen, input$met_trt[1])]
+  #   dat[, input$met_env] = sapply(dat[, input$met_env], as.factor)
+  #   dat[, input$met_gen] = sapply(dat[, input$met_gen], as.factor)
+  #   dat
+  # })
 
   met_data <- reactive({
     req(met_bks())
+    #req(ep())
+    req(input$met_env)
+    req(input$met_plt)
+    req(input$met_rep)
+    req(input$met_gen)
+    req(input$met_trt)
     dat = met_bks()[, c(input$met_env, input$met_plt, input$met_rep,
                         input$met_gen, input$met_trt)]
     dat[, input$met_env] = sapply(dat[, input$met_env], as.factor)
@@ -120,7 +170,15 @@ met_sv <- function(input, output, session, values){
   # # ndat <- dplyr::summarise(group_by(plrv, Genotype, Locality), Yield = mean(Yield))
   #
   mdl <- reactive({
-    dat = met_dat()
+    #dat = met_dat()
+    req(met_bks())
+    #req(ep())
+    req(input$met_env)
+    req(input$met_plt)
+    req(input$met_rep)
+    req(input$met_gen)
+    req(input$met_trt)
+    dat = met_data()
 
     #withProgress(message = "Calculating ...", {
     if(is.null(dat)) return(NULL)
