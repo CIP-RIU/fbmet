@@ -19,12 +19,14 @@ extract_params <- function(cn) {
 #' @param input shiny input
 #' @param output shiny output
 #' @param session shiny session
+#' @importFrom shinyFiles shinyFileChoose getVolumes parseFilePaths shinyFilesButton
 #' @param values shiny values
 #' @export
 met_sv <- function(input, output, session, values){
   volumes <- getVolumes(c("(E:)", "Page File (F:)"))
   #print(volumes)
-  shinyFileChoose(input, 'dc_met_fieldbook', roots=volumes, session=session )
+  shinyFileChoose(input, 'dc_met_fieldbook', roots=volumes, session=session,
+                  filetypes = c('', 'xls', 'xlsx'))
 
   metFiles <- reactive({
     req(input$dc_fieldbook)
