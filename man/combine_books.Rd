@@ -8,6 +8,8 @@ combine_books(books, fmt = NULL)
 }
 \arguments{
 \item{books}{a simple table}
+
+\item{fmt}{a format, defaults to NULL}
 }
 \value{
 dataframe

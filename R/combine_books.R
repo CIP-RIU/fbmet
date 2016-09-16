@@ -3,6 +3,7 @@
 #' combine_books
 #'
 #' @param books a simple table
+#' @param fmt a format, defaults to NULL
 #'
 #' @return dataframe
 #' @export
