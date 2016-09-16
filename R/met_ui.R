@@ -6,7 +6,7 @@
 #' @return shiny tagList
 #' @export
 met_ui <- function(title = "MET analytical graphics"){
-  shinydashboard::tabItem(
+  shinydashboard::tabItem(tabName = title,
 
   h2(title),
   fluidRow(
