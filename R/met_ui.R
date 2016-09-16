@@ -8,7 +8,7 @@
 met_ui <- function(title = "MET analytical graphics"){
   shinydashboard::tabItem(tabName = title,
 
-  h2(title),
+  h2("MET analytical graphics"),
   fluidRow(
     column(width = 12,
 
