@@ -29,8 +29,8 @@ met_sv <- function(input, output, session, values){
                   filetypes = c('', 'xls', 'xlsx'))
 
   metFiles <- reactive({
-    req(input$dc_fieldbook)
-    mf = parseFilePaths(volumes, input$dc_fieldbook)$datapath
+    req(input$dc_met_fieldbook)
+    mf = parseFilePaths(volumes, input$dc_met_fieldbook)$datapath
     mf = as.character(mf)
     mf
   })
