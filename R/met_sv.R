@@ -39,7 +39,8 @@ met_sv <- function(input, output, session, values){
 
   met_bks <- reactive({
     bks = metFiles()
-    if(length(bks) <= 4) return(NULL)
+    #print(bks)
+    if(length(bks) <= 2) return(NULL)
     dat <- withProgress({
       combine_books(bks)
     }, message = "Combining fieldbooks")
@@ -206,6 +207,7 @@ met_sv <- function(input, output, session, values){
     out
 
   })
+
 
 
   observe({

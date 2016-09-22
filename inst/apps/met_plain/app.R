@@ -146,19 +146,15 @@ shinyApp(
 
     output$plot_brushedpoints <- renderDataTable({
       res <- brush()
+      res <- brush()
+      dat = data()$biplot
       if(nrow(res)==0){
-        res <- data()$biplot[!vals$keeprows, , drop = FALSE]
+        res <- dat[!vals$keeprows, , drop = FALSE]
       }
-
-      # res <- mdata()
-      # res <- res[res$type == "GENSEL", ]
-      #print(res)
+      nn = min(5, ncol(dat))
       if (nrow(res) == 0 )
-        #return()
-        return(data()$biplot[, c(2:5)])
-
-      #if(nrow(res) == 0) res = resb
-      res[, c(2:5)]
+        return(dat[, c(2:nn)])
+      res[, c(2:nn)]
     }, options = list(filter = "top"))
 
 

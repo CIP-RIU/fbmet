@@ -103,12 +103,17 @@ met_selected <- function(input, output, session, raw, model, ndat){
 
   fltDat <- reactive({
     res <- brush()
+    dat = data()$biplot
+    #print(ncol(dat))
     if(nrow(res)==0){
-      res <- data()$biplot[!vals$keeprows, , drop = FALSE]
+      res <- dat[!vals$keeprows, , drop = FALSE]
     }
+    nn = min(5, ncol(dat))
+    #print(nn)
+
     if (nrow(res) == 0 )
-      return(data()$biplot[, c(2:5)])
-    res[, c(2:5)]
+      return(dat[, c(2:nn)])
+    res[, c(2:nn)]
   })
 
   output$plot_brushedpoints <- renderDataTable({
