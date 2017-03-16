@@ -12,4 +12,3 @@ exit status
 \description{
 Creates an Rstudio Addin.
 }
-

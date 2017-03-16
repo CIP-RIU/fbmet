@@ -14,7 +14,7 @@ extract_params <- function(cn) {
 
 
 
-#' met_sv
+#' fbmet_sv
 #'
 #' @param input shiny input
 #' @param output shiny output
@@ -22,7 +22,7 @@ extract_params <- function(cn) {
 #' @importFrom shinyFiles shinyFileChoose getVolumes parseFilePaths shinyFilesButton
 #' @param values shiny values
 #' @export
-met_sv <- function(input, output, session, values){
+fbmet_sv <- function(input, output, session, values){
   volumes <- getVolumes(c("(E:)", "Page File (F:)"))
   #print(volumes)
   shinyFileChoose(input, 'dc_met_fieldbook', roots=volumes, session=session,

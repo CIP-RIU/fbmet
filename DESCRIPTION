@@ -32,5 +32,5 @@ Suggests:
     shinydashboard,
     shinyBS
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Remotes: c5sire/BiocStyle, cran/shinyBS, c5sire/shinyFiles

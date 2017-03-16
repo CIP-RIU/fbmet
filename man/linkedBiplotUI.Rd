@@ -18,4 +18,3 @@ linkedBiplotUI
 \author{
 Reinhard Simon
 }
-

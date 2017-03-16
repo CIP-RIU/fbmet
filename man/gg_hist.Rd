@@ -14,4 +14,3 @@ gg_hist(model, filtered = unique(row.names(model$biplot)))
 \description{
 Shows histogram of averages.
 }
-

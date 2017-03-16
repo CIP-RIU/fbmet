@@ -1,11 +1,11 @@
 
-#' met_ui
+#' fbmet_ui
 #'
 #' @param title string for caption
 #'
 #' @return shiny tagList
 #' @export
-met_ui <- function(title = "MET analytical graphics"){
+fbmet_ui <- function(title = "MET analytical graphics"){
   shinydashboard::tabItem(tabName = title,
 
   h2("MET analytical graphics"),

@@ -44,13 +44,12 @@ The limits for alpha and lambda are computed using the mean squares from
 an ANOVA table for a RCBD with blocks nested into environments. If the data set is
 unbalanced, a warning is produced.
 }
+\references{
+Tai, G. C. C. (1971). Genotypic Stability Analysis and Its Application to Potato
+Regional Trials, Crop Science, Vol 11.
+}
 \author{
 Raul Eyzaguirre
 
 Reinhard Simon (transfer to ggplot2)
 }
-\references{
-Tai, G. C. C. (1971). Genotypic Stability Analysis and Its Application to Potato
-Regional Trials, Crop Science, Vol 11.
-}
-

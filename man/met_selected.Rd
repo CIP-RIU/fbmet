@@ -22,4 +22,3 @@ met_selected(input, output, session, raw, model, ndat)
 \description{
 Select interactively genotypes from a multi-environmental dataset.
 }
-

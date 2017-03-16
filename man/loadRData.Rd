@@ -15,10 +15,9 @@ R object
 \description{
 loadRData
 }
-\author{
-ricardo
-}
 \references{
 \url{http://stackoverflow.com/questions/5577221/how-can-i-load-an-object-into-a-variable-name-that-i-specify-from-an-r-data-file}
 }
-
+\author{
+ricardo
+}
