@@ -12,7 +12,7 @@ fbmet_ui <- function(title = "MET analytical graphics"){
   fluidRow(
     column(width = 12,
 
-      tabBox(width = 12,  selected = "Data",
+           shinydashboard::tabBox(width = 12,  selected = "Data",
           tabPanel("Data",
                    prepareMetDataUI("data")
           ),

@@ -18,6 +18,8 @@
 #' @import st4gi
 #' @import ggplot2
 #' @import ggrepel
+#' @importFrom stats qf
+#' @importFrom stats mvemet
 #' @details The limits for alpha and lambda are computed using the mean squares from
 #' an ANOVA table for a RCBD with blocks nested into environments. If the data set is
 #' unbalanced, a warning is produced.
@@ -107,9 +109,9 @@ gg_tai <- function(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title =
 
   # ANOVA
 
-  model <- aov(data[, trait] ~ data[, geno] + data[, env] +
+  model <- stats::aov(data[, trait] ~ data[, geno] + data[, env] +
                  data[, rep] %in% data[, env] + data[, geno]:data[, env])
-  at <- anova(model)
+  at <- stats::anova(model)
   #print(at)
   # Correction for missing values if any
 
@@ -132,13 +134,13 @@ gg_tai <- function(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title =
 
   # plot lambda limits
 
-  lmax <- max(c(lambda, qf(1 - (1 - conf) / 2, lc$ne - 2,
+  lmax <- max(c(lambda, stats::qf(1 - (1 - conf) / 2, lc$ne - 2,
                            lc$ne * (lc$ng - 1) * (lc$nr - 1)))) * 1.1
 
   # Prediction interval for alpha
 
   lx <- seq(0, lmax, lmax / 100)
-  ta <- qt(1 - (1 - conf) / 2, lc$ne - 2)
+  ta <- stats::qt(1 - (1 - conf) / 2, lc$ne - 2)
 
   div2 <- (lc$ne - 2) * at[2, 3] - (ta^2 + lc$ne - 2) * at[3, 3]
 
