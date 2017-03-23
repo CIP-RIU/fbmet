@@ -1,7 +1,7 @@
 Package: fbmet
 Title: Provides convenience Tools for Analysis of Multi-environmental Field
     Trials
-Version: 0.0.1.9020
+Version: 0.0.1.9021
 Authors@R: person("Reinard", "Simon", email = "r.simon@cgiar.org", role = c("aut", "cre"))
 Description: Provides a set of graphics (modified biplot, tai plot, etc) and
     reports.
@@ -24,7 +24,6 @@ Imports:
     stats,
     utils
 Suggests:
-    BiocStyle,
     knitr,
     rmarkdown,
     testthat,

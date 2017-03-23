@@ -19,7 +19,6 @@
 #' @import ggplot2
 #' @import ggrepel
 #' @importFrom stats qf
-#' @importFrom stats mvemet
 #' @details The limits for alpha and lambda are computed using the mean squares from
 #' an ANOVA table for a RCBD with blocks nested into environments. If the data set is
 #' unbalanced, a warning is produced.
@@ -90,7 +89,7 @@ gg_tai <- function(trait, geno, env, rep, data, maxp = 0.1, conf = 0.95, title =
     stop("You need at least 3 genotypes and 3 environments to run Tai")
 
   if (lc$c1 == 1 & lc$c2 == 1 & lc$c3 == 0) {
-    data[, trait] <- mvemet(trait, geno, env, rep, data, maxp, tol = 1e-06)[, 5]
+    data[, trait] <- st4gi::mve.met(trait, geno, env, rep, data, maxp, tol = 1e-06)[, 5]
     warning(paste("The data set is unbalanced, ",
                   format(lc$pmis * 100, digits = 3),
                   "% missing values estimated.", sep = ""))
