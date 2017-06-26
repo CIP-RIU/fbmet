@@ -23,7 +23,7 @@ combine_books <- function(books, fmt = NULL) {
     dat = readxl::read_excel(books[1], sheet = "Fieldbook")
   }
   if(fmt == ".csv"){
-    dat = read.csv(books[1])
+    dat = utils::read.csv(books[1])
   }
 
   add_locality_name <- function(dat, book, fmt = ".xls") {
@@ -47,7 +47,7 @@ combine_books <- function(books, fmt = NULL) {
   fin = ""
   for(i in 2:n){
     #print(i)
-    if(fmt == ".csv") fin = read.csv(books[i])
+    if(fmt == ".csv") fin = utils::read.csv(books[i])
     if(fmt == ".xls") fin = readxl::read_excel(books[i], sheet = "Fieldbook")
     if(fmt == ".xlsx") fin = readxl::read_excel(books[i], sheet = "Fieldbook")
 
