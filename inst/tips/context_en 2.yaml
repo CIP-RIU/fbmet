@@ -17,3 +17,5 @@ histTitle_hover: It shows a histogram of all genotype means. When genotypes are 
               the linked biplot they are overlayed in a distinct color.
 taiTitle_label: Tai plot
 taiTitle_hover: Stability analysis.
+getFieldbooks_label: Fieldbook selection
+getFieldbooks_hover: Select at least 3 fieldbooks.
